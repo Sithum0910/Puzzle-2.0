@@ -1,55 +1,55 @@
-const container = document.querySelector('.puzzle-box');
-const congratsMessage = document.querySelector('.congrats-message');
-const imageSrc = 'https://raw.githubusercontent.com/Sithum0910/Puzzle-2.0/refs/heads/main/IMG-20220718-WA0104_0.png';
-const gridSize = 4;
-const pieceSize = 100;
-let correctPieces = 0;
+const gridSize = 3;
+const puzzleContainer = document.getElementById('puzzle-container');
+let pieces = [];
 
+// Initialize the puzzle
 function createPuzzle() {
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
+    pieces = [];
+    puzzleContainer.innerHTML = '';
+    let positions = [...Array(gridSize * gridSize).keys()];
+    positions = shuffle(positions);
+
+    positions.forEach((pos, index) => {
+        if (pos !== (gridSize * gridSize - 1)) {
             const piece = document.createElement('div');
-            piece.classList.add('puzzle-piece');
-            piece.style.backgroundImage = `url(${imageSrc})`;
-            piece.style.backgroundPosition = `-${x * pieceSize}px -${y * pieceSize}px`;
-            piece.style.top = `${Math.random() * 300}px`;
-            piece.style.left = `${Math.random() * 300}px`;
-            piece.dataset.x = x;
-            piece.dataset.y = y;
-
-            piece.draggable = true;
-            piece.addEventListener('dragstart', dragStart);
-            piece.addEventListener('dragend', dragEnd);
-            
-            container.appendChild(piece);
+            piece.className = 'puzzle-piece';
+            const x = (pos % gridSize) * -100;
+            const y = Math.floor(pos / gridSize) * -100;
+            piece.style.backgroundPosition = `${x}px ${y}px`;
+            piece.dataset.index = index;
+            piece.dataset.position = pos;
+            piece.addEventListener('click', () => movePiece(piece));
+            puzzleContainer.appendChild(piece);
+            pieces.push(piece);
         }
+    });
+}
+
+// Shuffle the puzzle pieces
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Move the clicked piece if it's adjacent to the empty space
+function movePiece(piece) {
+    const emptyPos = pieces.length;
+    const index = parseInt(piece.dataset.index);
+    const adjacentPositions = [index - 1, index + 1, index - gridSize, index + gridSize];
+
+    if (adjacentPositions.includes(emptyPos)) {
+        piece.style.order = emptyPos;
+        piece.dataset.index = emptyPos;
+        pieces[emptyPos] = piece;
+        pieces[index] = undefined;
     }
 }
 
-let activePiece = null;
+// Reset the puzzle
+document.getElementById('reset-btn').addEventListener('click', createPuzzle);
 
-function dragStart(e) {
-    activePiece = e.target;
-}
-
-function dragEnd(e) {
-    const rect = container.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const correctX = activePiece.dataset.x * pieceSize;
-    const correctY = activePiece.dataset.y * pieceSize;
-
-    if (Math.abs(x - correctX) < 20 && Math.abs(y - correctY) < 20) {
-        activePiece.style.top = `${correctY}px`;
-        activePiece.style.left = `${correctX}px`;
-        activePiece.draggable = false;
-        correctPieces++;
-
-        if (correctPieces === gridSize * gridSize) {
-            congratsMessage.classList.remove('hidden');
-        }
-    }
-}
-
+// Initialize the puzzle on page load
 createPuzzle();
