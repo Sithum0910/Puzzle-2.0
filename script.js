@@ -1,55 +1,73 @@
 const gridSize = 3;
 const puzzleContainer = document.getElementById('puzzle-container');
-let pieces = [];
+const resetButton = document.getElementById('reset-btn');
+let tiles = [];
+let emptyTile = { x: gridSize - 1, y: gridSize - 1 };
 
 // Initialize the puzzle
-function createPuzzle() {
-    pieces = [];
+function initPuzzle() {
     puzzleContainer.innerHTML = '';
-    let positions = [...Array(gridSize * gridSize).keys()];
-    positions = shuffle(positions);
+    tiles = [];
 
-    positions.forEach((pos, index) => {
-        if (pos !== (gridSize * gridSize - 1)) {
-            const piece = document.createElement('div');
-            piece.className = 'puzzle-piece';
-            const x = (pos % gridSize) * -100;
-            const y = Math.floor(pos / gridSize) * -100;
-            piece.style.backgroundPosition = `${x}px ${y}px`;
-            piece.dataset.index = index;
-            piece.dataset.position = pos;
-            piece.addEventListener('click', () => movePiece(piece));
-            puzzleContainer.appendChild(piece);
-            pieces.push(piece);
+    const positions = [];
+    for (let i = 0; i < gridSize * gridSize - 1; i++) {
+        positions.push(i);
+    }
+    shuffle(positions);
+
+    let index = 0;
+    for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+            if (row === gridSize - 1 && col === gridSize - 1) {
+                tiles.push(null);
+                continue;
+            }
+
+            const tile = document.createElement('div');
+            tile.classList.add('puzzle-piece');
+            tile.style.backgroundPosition = `${-col * 100}px ${-row * 100}px`;
+            tile.style.gridRowStart = row + 1;
+            tile.style.gridColumnStart = col + 1;
+            tile.dataset.x = col;
+            tile.dataset.y = row;
+            tile.dataset.index = positions[index];
+            tile.addEventListener('click', () => moveTile(col, row));
+            puzzleContainer.appendChild(tile);
+            tiles.push(tile);
+            index++;
         }
-    });
+    }
 }
 
-// Shuffle the puzzle pieces
+// Shuffle the positions array
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-    return array;
 }
 
-// Move the clicked piece if it's adjacent to the empty space
-function movePiece(piece) {
-    const emptyPos = pieces.length;
-    const index = parseInt(piece.dataset.index);
-    const adjacentPositions = [index - 1, index + 1, index - gridSize, index + gridSize];
+// Move a tile if it's adjacent to the empty tile
+function moveTile(x, y) {
+    const dx = Math.abs(x - emptyTile.x);
+    const dy = Math.abs(y - emptyTile.y);
 
-    if (adjacentPositions.includes(emptyPos)) {
-        piece.style.order = emptyPos;
-        piece.dataset.index = emptyPos;
-        pieces[emptyPos] = piece;
-        pieces[index] = undefined;
+    if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
+        const tile = tiles.find(t => t && parseInt(t.dataset.x) === x && parseInt(t.dataset.y) === y);
+        if (tile) {
+            tile.style.gridRowStart = emptyTile.y + 1;
+            tile.style.gridColumnStart = emptyTile.x + 1;
+            tile.dataset.x = emptyTile.x;
+            tile.dataset.y = emptyTile.y;
+
+            emptyTile.x = x;
+            emptyTile.y = y;
+        }
     }
 }
 
-// Reset the puzzle
-document.getElementById('reset-btn').addEventListener('click', createPuzzle);
+// Reset button listener
+resetButton.addEventListener('click', initPuzzle);
 
-// Initialize the puzzle on page load
-createPuzzle();
+// Initialize puzzle on load
+initPuzzle();
