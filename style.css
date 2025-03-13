@@ -1,71 +1,56 @@
 body {
-    margin: 0;
-    padding: 0;
-    background: #ffedf0;
-    color: #b30047;
-    font-family: 'Arial', sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff;
     height: 100vh;
+    margin: 0;
 }
 
-.title {
-    font-size: 24px;
+h1 {
+    color: #ff1493;
     margin-bottom: 20px;
-    color: #ff3366;
 }
 
-.puzzle-box {
-    width: 400px;
-    height: 400px;
-    border: 3px dashed #ff3366;
-    border-radius: 10px;
-    position: relative;
+#puzzle-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 2px;
+    border: 5px solid #ff1493;
+    background-color: #ffe4e1;
 }
 
 .puzzle-piece {
     width: 100px;
     height: 100px;
-    position: absolute;
-    background-size: 400px 400px;
-    border-radius: 8px;
-    cursor: grab;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    background-image: url('https://raw.githubusercontent.com/Sithum0910/Puzzle-2.0/refs/heads/main/IMG-20220718-WA0104_0.png');
+    background-size: 300px 300px;
+    cursor: pointer;
     transition: transform 0.3s ease;
 }
 
-.puzzle-piece:active {
-    cursor: grabbing;
-    transform: scale(1.1);
-}
-
-.congrats-message {
-    margin-top: 20px;
-    font-size: 20px;
-    background: #ffccd5;
+#reset-btn {
+    margin-top: 15px;
     padding: 10px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: none;
+    background-color: #ff69b4;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.congrats-message.hidden {
-    display: none;
+#reset-btn:hover {
+    background-color: #ff1493;
 }
 
 footer {
     margin-top: 20px;
+    text-align: center;
 }
 
-footer a {
-    text-decoration: none;
-    color: #b30047;
-    display: flex;
-    align-items: center;
-}
-
-footer img {
-    width: 24px;
-    margin-right: 8px;
+footer p {
+    margin: 5px;
 }
