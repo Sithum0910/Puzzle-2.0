@@ -23,10 +23,10 @@ h1 {
     margin-bottom: 20px;
 }
 
-#puzzle-container {
+#puzzle-board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
-    grid-gap: 10px;
+    grid-gap: 5px;
     justify-content: center;
     margin-bottom: 20px;
 }
@@ -34,15 +34,15 @@ h1 {
 .puzzle-piece {
     width: 100px;
     height: 100px;
-    background-size: cover;
-    cursor: pointer;
+    background-size: 300px 300px;
     border: 2px solid #e74c3c;
     border-radius: 10px;
+    cursor: grab;
     transition: transform 0.2s;
 }
 
 .puzzle-piece:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .footer {
