@@ -1,85 +1,46 @@
-const puzzleBoard = document.getElementById('puzzle-board');
-const imageUrl = 'https://raw.githubusercontent.com/Sithum0910/Puzzle-2.0/refs/heads/main/IMG-20220718-WA0104_0.png'; // Use your image URL
-const rows = 3;
-const cols = 3;
-const pieceSize = 100; // Size of each puzzle piece
+const puzzleContainer = document.getElementById('puzzle-container');
+const shuffleButton = document.getElementById('shuffle-btn');
 
-let pieces = [];
+// Image URL
+const imageUrl = 'https://raw.githubusercontent.com/Sithum0910/Puzzle-2.0/refs/heads/main/IMG-20230316-WA0002_0.png';
 
-// Create the puzzle pieces
+// Create puzzle pieces
 function createPuzzle() {
-    for (let i = 0; i < rows * cols; i++) {
+    puzzleContainer.innerHTML = '';
+    for (let i = 0; i < 9; i++) {
         const piece = document.createElement('div');
-        piece.className = 'puzzle-piece';
+        piece.classList.add('puzzle-piece');
+        const x = (i % 3) * -100;
+        const y = Math.floor(i / 3) * -100;
         piece.style.backgroundImage = `url(${imageUrl})`;
-        piece.style.backgroundPosition = `-${(i % cols) * pieceSize}px -${Math.floor(i / cols) * pieceSize}px`;
-        piece.dataset.index = i; // Store original index
-        piece.draggable = true;
-        piece.addEventListener('dragstart', dragStart);
-        piece.addEventListener('dragover', dragOver);
-        piece.addEventListener('drop', dragDrop);
-        puzzleBoard.appendChild(piece);
-        pieces.push(piece);
+        piece.style.backgroundPosition = `${x}px ${y}px`;
+        piece.dataset.index = i;
+        puzzleContainer.appendChild(piece);
     }
-    shufflePieces();
+    addLoveAnimations();
 }
 
-// Shuffle the puzzle pieces
-function shufflePieces() {
-    for (let i = pieces.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        puzzleBoard.appendChild(pieces[j]);
-    }
+// Shuffle puzzle pieces
+function shufflePuzzle() {
+    const pieces = Array.from(document.querySelectorAll('.puzzle-piece'));
+    pieces.sort(() => Math.random() - 0.5);
+    pieces.forEach(piece => puzzleContainer.appendChild(piece));
 }
 
-// Drag and drop functionality
-let draggedPiece;
+// Love animations
+function addLoveAnimations() {
+    for (let i = 0; i < 10; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('love-heart');
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.bottom = `${Math.random() * 100}px`;
+        document.body.appendChild(heart);
 
-function dragStart(e) {
-    draggedPiece = this;
-    setTimeout(() => (this.style.opacity = '0.5'), 0);
-}
-
-function dragOver(e) {
-    e.preventDefault();
-}
-
-function dragDrop(e) {
-    e.preventDefault();
-    if (draggedPiece !== this) {
-        const tempBackground = draggedPiece.style.backgroundImage;
-        draggedPiece.style.backgroundImage = this.style.backgroundImage;
-        this.style.backgroundImage = tempBackground;
-        checkWin();
-    }
-    draggedPiece.style.opacity = '1';
-}
-
-// Check if the puzzle is solved
-function checkWin() {
-    const isWin = pieces.every((piece, index) => {
-        const expectedPosition = `-${(index % cols) * pieceSize}px -${Math.floor(index / cols) * pieceSize}px`;
-        return piece.style.backgroundPosition === expectedPosition;
-    });
-
-    if (isWin) {
-        alert('You win! ❤️');
-        createPuzzle(); // Restart the game
+        setTimeout(() => heart.remove(), 3000);
     }
 }
 
-// Love animation
-setInterval(() => {
-    const love = document.createElement('div');
-    love.className = 'love-animation';
-    love.innerHTML = '❤️';
-    love.style.position = 'absolute';
-    love.style.left = `${Math.random() * 100}vw`;
-    love.style.top = `${Math.random() * 100}vh`;
-    love.style.fontSize = `${Math.random() * 2 + 1}em`;
-    document.body.appendChild(love);
-    setTimeout(() => love.remove(), 2000);
-}, 500);
+shuffleButton.addEventListener('click', shufflePuzzle);
 
-// Initialize the puzzle
+// Initialize puzzle
 createPuzzle();
