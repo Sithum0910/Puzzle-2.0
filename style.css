@@ -1,34 +1,57 @@
 body {
     margin: 0;
     padding: 0;
-    background: #121212;
-    color: #fff;
+    background: #ffedf0;
+    color: #b30047;
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     flex-direction: column;
+    height: 100vh;
 }
 
-.puzzle-container {
-    display: grid;
-    grid-template-columns: repeat(4, 100px); /* 4x4 grid for regular pieces */
-    grid-gap: 5px;
+.title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ff3366;
+}
+
+.puzzle-box {
+    width: 400px;
+    height: 400px;
+    border: 3px dashed #ff3366;
+    border-radius: 10px;
+    position: relative;
 }
 
 .puzzle-piece {
     width: 100px;
     height: 100px;
+    position: absolute;
     background-size: 400px 400px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    transition: transform 0.2s;
+    cursor: grab;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
 }
 
-.puzzle-piece:hover {
-    transform: scale(1.05);
+.puzzle-piece:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+}
+
+.congrats-message {
+    margin-top: 20px;
+    font-size: 20px;
+    background: #ffccd5;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.congrats-message.hidden {
+    display: none;
 }
 
 footer {
@@ -37,7 +60,7 @@ footer {
 
 footer a {
     text-decoration: none;
-    color: #fff;
+    color: #b30047;
     display: flex;
     align-items: center;
 }
