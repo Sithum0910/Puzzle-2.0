@@ -1,29 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Puzzle</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="title">Complete the Love Puzzle!</div>
-    
-    <div class="puzzle-box">
-        <!-- Puzzle pieces will be added dynamically -->
-    </div>
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff;
+    height: 100vh;
+    margin: 0;
+}
 
-    <div class="congrats-message hidden">
-        <p>You completed the puzzle! ❤️</p>
-    </div>
+h1 {
+    color: #ff1493;
+    margin-bottom: 20px;
+}
 
-    <footer>
-        <a href="https://github.com/Sithum0910" target="_blank">
-            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Icon">
-            <span>developed by sithum &lt;/&gt;</span>
-        </a>
-    </footer>
+#puzzle-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 2px;
+    border: 5px solid #ff1493;
+    background-color: #ffe4e1;
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+.puzzle-piece {
+    width: 100px;
+    height: 100px;
+    background-image: url('https://raw.githubusercontent.com/Sithum0910/Puzzle-2.0/refs/heads/main/IMG-20220718-WA0104_0.png');
+    background-size: 300px 300px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#reset-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #ff69b4;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#reset-btn:hover {
+    background-color: #ff1493;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+footer p {
+    margin: 5px;
+}
